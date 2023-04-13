@@ -52,14 +52,18 @@ let data = [
   },
   {
     id: 8,
-    name: "airpods pro",
-    price: 249,
+    name: "airpods pro xin",
+    price: 21700000000,
     img: "https://www.maccenter.vn/Accessories/AirPods-Pro-A.jpg",
     amount: 0,
   },
 ];
+// render lan dau tien
 const main = document.getElementById("main");
 document.getElementsByClassName("total-money")[0].innerHTML = totalMoney;
+document.getElementsByClassName("remaining-money")[0].innerHTML =
+  remainingMoney;
+document.getElementsByClassName("percentage-spent")[0].innerHTML = "0.0000000";
 const result = data.map((e, i) => {
   return `<div class="imgcontent" id=${e.id}>
   <img
@@ -81,7 +85,7 @@ console.log(btnGroup);
 console.log(result);
 main.innerHTML = result;
 
-// Attach event listener to parent element (main)
+//logic buy and sell button
 document.getElementById("main").addEventListener("click", (event) => {
   const target = event.target;
   if (target.classList.contains("sell")) {
@@ -95,6 +99,10 @@ document.getElementById("main").addEventListener("click", (event) => {
       };
       data = [...newArr];
       renderItems();
+      document.getElementsByClassName("remaining-money")[0].innerHTML =
+        Number(
+          document.getElementsByClassName("remaining-money")[0].innerHTML
+        ) + newArr[itemIndex].price;
     }
   } else if (target.classList.contains("buy")) {
     // Handle buy button click
@@ -108,11 +116,20 @@ document.getElementById("main").addEventListener("click", (event) => {
       };
       data = [...newArr];
       renderItems();
+      document.getElementsByClassName("remaining-money")[0].innerHTML =
+        document.getElementsByClassName("remaining-money")[0].innerHTML -
+        newArr[itemIndex].price;
     }
   }
+  document.getElementsByClassName("percentage-spent")[0].innerHTML = (
+    ((totalMoney -
+      Number(document.getElementsByClassName("remaining-money")[0].innerHTML)) /
+      totalMoney) *
+    100
+  ).toFixed(8);
 });
 
-// Function to render items
+//function mo phong re-render component react
 function renderItems() {
   const main = document.getElementById("main");
   const result = data.map((e, i) => {
